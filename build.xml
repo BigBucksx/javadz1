@@ -1,0 +1,69 @@
+<project name="dz1" default="run" basedir=".">
+	<description>
+		1. Implementation of resizable array backed collection ArrayBackedIndexedCollection
+		2. Stack collection - implemented from ArrayBackedIndexedCollection (adapter pattern)
+		3. SmartScriptParser
+	</description>
+
+	<property name="src" location="src"/>
+	<property name="hr.fer.zemris.java.custom.collections" location="${src}/hr/fer/zemris/java/custom/collections"/>
+	<property name="hr.fer.zemris.java.custom.scripting.tokens" location="${src}/hr/fer/zemris/java/custom/scripting/tokens"/>
+	<property name="hr.fer.zemris.java.custom.scripting.nodes" location="${src}/hr/fer/zemris/java/custom/scripting/nodes"/>
+	<property name="hr.fer.zemris.java.custom.scripting.parser" location="${src}/hr/fer/zemris/java/custom/scripting/parser"/>
+	<property name="hr.fer.zemris.java.custom.scripting.main" location="${src}/hr/fer/zemris/java/custom/scripting/main"/>
+	<property name="build" location="build"/>
+	<property name="build.classes" location="${build}/classes"/>
+	<property name="dist" location="dist"/>
+	<property name="dist.lib" location="${dist}/lib"/>
+	<property name="dist.doc" location="${dist}/doc"/>
+	<property name="program" value="hr.fer.zemris.java.custom.scripting.main.Main"/>
+
+	<target name="setup">
+		<mkdir dir="${src}" />
+		<mkdir dir="${hr.fer.zemris.java.custom.scripting.tokens}"/>
+		<mkdir dir="${hr.fer.zemris.java.custom.scripting.nodes}"/>
+		<mkdir dir="${hr.fer.zemris.java.custom.scripting.parser}"/>
+		<mkdir dir="${hr.fer.zemris.java.custom.collections}"/>
+	</target>
+
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${src}"/>
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${dist}"/>
+	</target>
+
+	<target name="build" depends="init">
+		<javac srcdir="${hr.fer.zemris.java.custom.scripting.parser}:${hr.fer.zemris.java.custom.scripting.nodes}:${hr.fer.zemris.java.custom.scripting.tokens}:${hr.fer.zemris.java.custom.collections}:${hr.fer.zemris.java.custom.scripting.main}" destdir="${build.classes}" 
+		encoding="UTF-8" debug="on" 
+		debuglevel="lines,vars,source"
+		includeAntRuntime="false" />
+	</target>
+
+
+	<target name="run" depends="build">
+		<java classname="${program}" classpath="${build.classes}"
+		fork="true" />
+	</target>
+
+	<target name="dist" depends="build">
+		<jar jarfile="${dist.lib}/${ant.project.name}-${DSTAMP}.jar"
+		basedir="${build.classes}">
+			<manifest>
+				<attribute name="Main-Class" value="${program}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}"  />
+	</target>
+
+	<target name="cleanAll">
+		<delete dir="${src}"/>
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+</project>
